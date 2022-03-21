@@ -1,28 +1,45 @@
 # WebScraping
 
-## Estimize Background:
-Estimize, an open web-based platform, has become an useful source to retrieve financial estiamtes. It facilitates the aggregation of financial estiamtes from a diverse community of individuals. As shown in Figure 1, founded in 2011, there are increasing numbers of contributors who join the platform to provide financial estimates for an increasing numbers of companies. Consequently, an increasing numbers of earning forecasts can be used by Estimize for better consensus estimates. As of March 2020, in total there are 97,439 users contributed for 2,220 companies (e.g., stocks) on the platform. Compared with the analysts in IBES, Estimize solicits contributions from a community of individuals with a wide range of occupations. As shown in Figure 1, Estimize covers different kinds of contributors including both professionals, such as sell-side, buy-side, or independent analysts, and nonprofessionals, such as academia, student, Information Technology, and Energy. Because of the contributions of these individuals, who have diverse backgrounds and viewpoints, Estimize consensus can be more accurate than the Wall Street consensus and provides incremental information for forecasting earnings and for measuring the market expectation of earnings.
+Estimize is an open-source platform that provides financial metrics for various companies(ticker). The various metrics are revenue and EPS. The website also provides estimates from multiple analysts for the same. <br>
+ 
+The data from the website was obtained using the web scraping technique, specifically python implementation of automated web scrapping package Selenium was utilized. Initially, a list of 50 different tickers was imported in python. Seven functions were created to collect the data for these 50 tickers. Within each of these functions, collected data were appended to lists and different lists were zipped together. Zip-created tuples were then exported to an excel sheet. <br>
 
-# WebScraping Tasks:
-(a) Scrape the data from the Estimize.com for at least one year. </br>
-(b) Build a dataset to store the EPS estimation information, including: </br>
-  (a) The company basic information, such as Ticker, company name, Sectors, Industries, number of followers, number of analysts. </br>
-    i. ticker: EHTH </br>
-    ii. name: eHealth, inc. </br>
-    iii. Sectors: Financials </br>
-    iv. Industries: Insurance </br>
-    v. number of folowers: 66 </br>
-    vi. number of analysts: 99 </br>
-  (b) The EPS information, including Reported Earnings, Estimize Consensus, Estimize Mean, Wall Street Consensus, and EPS estimations of all available analysts. </br>
-(c) The information about each analyst, including Analyst name, Roles, Join date, Analyst Confidence score, number of estimates, Stocks Covered, pending estimates , Scored estimates. </br>
-    i. name: Steven Halper</br>
-    ii. roles: Financial Professional, Sell Side, and Broker </br>
-    iii. Join Date: Jan 2017 </br>
-    iv. Analyst Confidence Score: 5.4</br>
-    v. error rate: 17.3%</br>
-    vi. Accuracy Percentile: 24%</br>
-    vii. points: 16 </br>
-    viii. points/Estimate: 1 </br>
-    ix. stocks: 20 </br>
-    x. pending: 28 </br>
-    xi. All companies information </br>
+# Function Description:
+# 1) getCompanyInformation	
+    Input: ticker List.
+    Gets basic Company information - ticker, name, sector, industry, number of followers, number of analysts;
+    Appends all values to a list 
+# 2)	getEPSInformation	
+    Input: ticker.
+    Gets EPS information of the ticker - ticker, quarter, reported earning, estimize consensus, estimize mean, Wall Street consensus; Appends all the collected data to a list.
+# 3)	getEPSAnalystsEstimation	
+    Input: ticker, quarter List.
+    Gets all EPS estimations of analysts - ticker, quarter, analysts display name, analysts secondary name, analyst EPS estimations; Appends all the collected data to a list.
+# 4)	get_Analyst_Information	
+    Gets analysts basic information - analyst name, roles, joining date, analyst confidence rate, error rate, accuracy percentile, points, points per estimates, stocks, pending estimates; 
+    Appends all collected data to a list. 
+# 5)	get_Stocks_Covered	
+    Input: Analyst name
+    Gets information on stocks covered by the analysts – analyst name, ticker, report, quarter, points, points per estimates, error rate, accuracy; Appends all collected data to a list.
+# 6)	get_Pending_Estimates	
+    Input: Analyst name
+    Gets information on pending estimates of analysts – analyst name, ticker, report, quarter, published, EPS, revenue; Appends all collected data to a list.
+# 7)	get_Scored_Estimates	
+    Input: Analyst name
+    Gets information on scored estimates of analysts – analyst name, ticker, report, quarter, rank, EPS, revenue, total points; Appends all collected data to a list
+
+# Data Cleaning:
+    Replaced N/A and empty string columns with NULL in the exported dataset.
+
+# Database Creation:
+    Step 1: Created a Database in MySQL workbench named MSA_ESTIMIZE
+    Step 2: Created tables in database MSA_ESTIMIZE. Created the following tables in the database
+          1.	COMPANYINFORMATION
+          2.	ANALYSTINFORMATION
+          3.	EPSINFORMATION
+          4.	EPSANALYSTESTIMATION
+          5.	STOCKSCOVERED
+          6.	PENDINGESTIMATION
+          7.	SCOREDESTIMATION
+    Step 3: Insert the values as obtained in the excel workbook into the tables created using insert statements.
+
